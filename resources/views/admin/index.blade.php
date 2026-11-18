@@ -10,10 +10,12 @@
             <h1 class="text-3xl font-extrabold">{{ $config['title'] }}</h1>
             <p class="text-slate-500 dark:text-slate-400 text-sm mt-2">{{ $config['description'] }}</p>
         </div>
-        <a href="{{ route('admin.create', ['resource' => $resource]) }}"
-            class="px-5 py-3 rounded-xl bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition">
-            + Tambah {{ $config['singular'] }}
-        </a>
+        @unless(!empty($config['approvable']))
+            <a href="{{ route('admin.create', ['resource' => $resource]) }}"
+                class="px-5 py-3 rounded-xl bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition">
+                + Tambah {{ $config['singular'] }}
+            </a>
+        @endunless
     </div>
 
     <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
@@ -43,7 +45,7 @@
                                         <span class="text-xs text-slate-400 dark:text-slate-500">{{ (int) $item->{$column} }}/5</span>
                                     @elseif($column === 'is_approved')
                                         <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $item->{$column} ? 'bg-emerald-50 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400' : 'bg-amber-50 dark:bg-amber-400/10 text-amber-600 dark:text-amber-400' }}">
-                                            {{ $item->{$column} ? 'Tampil' : 'Menunggu' }}
+                                            {{ $item->{$column} ? 'Disetujui' : 'Belum disetujui' }}
                                         </span>
                                     @elseif($column === 'image')
                                         @if($item->{$column})
@@ -64,25 +66,31 @@
                                             @method('PATCH')
                                             <button type="submit"
                                                 class="px-3 py-2 rounded-lg text-xs font-bold transition {{ $item->is_approved ? 'bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700' : 'bg-emerald-50 dark:bg-emerald-400/10 border border-emerald-300 dark:border-emerald-400/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-400 hover:text-slate-950' }}">
-                                                {{ $item->is_approved ? 'Sembunyikan' : 'Setujui tampil' }}
+                                                {{ $item->is_approved ? 'Tolak' : 'Setujui' }}
                                             </button>
                                         </form>
                                     @endif
-                                    <a href="{{ route('admin.edit', ['resource' => $resource, 'item' => $item->id]) }}"
-                                        class="px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-400/10 border border-amber-300 dark:border-amber-400/30 text-amber-600 dark:text-amber-400 text-xs font-bold hover:bg-amber-400 hover:text-slate-950 transition">Edit</a>
-                                    <form method="POST" action="{{ route('admin.destroy', ['resource' => $resource, 'item' => $item->id]) }}"
-                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="px-3 py-2 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-bold hover:bg-red-500 hover:text-slate-900 dark:hover:text-white transition">Hapus</button>
-                                    </form>
+                                    @unless(!empty($config['approvable']))
+                                        <a href="{{ route('admin.edit', ['resource' => $resource, 'item' => $item->id]) }}"
+                                            class="px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-400/10 border border-amber-300 dark:border-amber-400/30 text-amber-600 dark:text-amber-400 text-xs font-bold hover:bg-amber-400 hover:text-slate-950 transition">Edit</a>
+                                        <form method="POST" action="{{ route('admin.destroy', ['resource' => $resource, 'item' => $item->id]) }}"
+                                            onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="px-3 py-2 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-bold hover:bg-red-500 hover:text-slate-900 dark:hover:text-white transition">Hapus</button>
+                                        </form>
+                                    @endunless
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="{{ count($config['columns']) + 2 }}" class="px-5 py-12 text-center text-slate-400 dark:text-slate-500">
-                                Belum ada data. Klik tombol <strong>+ Tambah {{ $config['singular'] }}</strong> untuk membuat satu.
+                                @if(!empty($config['approvable']))
+                                    Belum ada testimoni. Testimoni dari pengunjung akan muncul di sini untuk disetujui.
+                                @else
+                                    Belum ada data. Klik tombol <strong>+ Tambah {{ $config['singular'] }}</strong> untuk membuat satu.
+                                @endif
                             </td>
                         </tr>
                     @endforelse

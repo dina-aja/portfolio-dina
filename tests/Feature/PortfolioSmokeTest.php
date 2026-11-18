@@ -115,6 +115,26 @@ class PortfolioSmokeTest extends TestCase
         $this->assertDatabaseCount('testimonials', 0);
     }
 
+    public function test_halaman_admin_testimoni_hanya_memiliki_aksi_persetujuan(): void
+    {
+        Testimonial::create([
+            'name' => 'Testimoni Contoh',
+            'category' => 'Teman',
+            'rating' => 5,
+            'message' => 'Testimoni contoh untuk pengujian tampilan admin.',
+            'is_approved' => false,
+        ]);
+
+        $response = $this->actingAs(User::factory()->create())->get('/admin/testimonials');
+
+        $response->assertOk();
+        $response->assertDontSee('+ Tambah Testimoni');
+        $response->assertDontSee('>Edit</a>');
+        $response->assertDontSee('>Hapus</button>');
+        $response->assertSee('Setujui');
+        $response->assertSee('Belum disetujui');
+    }
+
     public function test_admin_dapat_menyetujui_dan_menyembunyikan_testimoni(): void
     {
         $testimonial = Testimonial::create([
