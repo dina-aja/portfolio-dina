@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Console\ServeCommand;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Cadangan jika header proxy tidak terbaca: paksa semua URL (termasuk
+        // asset CSS/JS) memakai https ketika request datang lewat proxy HTTPS.
+        if (request()->header('X-Forwarded-Proto') === 'https') {
+            URL::forceScheme('https');
+        }
+
         // Laravel menyaring variabel lingkungan saat mode reload `php artisan serve`.
         // Di Windows, kunci $_ENV memakai huruf asli ("Path", "SystemRoot", dll.)
         // sehingga tidak cocok dengan daftar bawaan ("PATH", "SYSTEMROOT") dan
