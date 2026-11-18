@@ -11,11 +11,13 @@ class Testimonial extends Model
         'role',
         'category',
         'message',
+        'rating',
         'avatar',
         'is_approved',
     ];
 
     protected $casts = [
+        'rating' => 'integer',
         'is_approved' => 'boolean',
     ];
 

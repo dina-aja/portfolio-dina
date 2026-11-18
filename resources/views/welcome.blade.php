@@ -591,7 +591,11 @@
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($testimonials as $testimonial)
                 <div class="testimonial-item p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800" data-category="{{ $testimonial->category }}">
-                    <div class="text-3xl text-cyan-500 mb-3">“</div>
+                    @php($bintang = max(1, min(5, (int) ($testimonial->rating ?? 5))))
+                    <div class="flex items-center gap-2 mb-3" aria-label="Penilaian {{ $bintang }} dari 5 bintang">
+                        <span style="color:#fbbf24; letter-spacing:.12em; font-size:1.05rem;">{{ str_repeat('★', $bintang) }}</span><span style="color:#cbd5e1; letter-spacing:.12em; font-size:1.05rem;">{{ str_repeat('★', 5 - $bintang) }}</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400">{{ $bintang }}/5</span>
+                    </div>
                     <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">{{ $testimonial->message }}</p>
                     <div class="flex items-center gap-3">
                         <div class="w-11 h-11 rounded-full bg-cyan-100 dark:bg-cyan-400/10 flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">
@@ -610,6 +614,15 @@
 
         <!-- Form kirim testimoni -->
         <div class="mt-14 max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
+            <style>
+                .rating-input { gap: .35rem; }
+                .rating-radio { position: absolute; width: 1px; height: 1px; opacity: 0; }
+                .rating-star { cursor: pointer; font-size: 2rem; line-height: 1; color: #cbd5e1; transition: color .15s, transform .15s; }
+                .dark .rating-star { color: #475569; }
+                .rating-star.is-active { color: #fbbf24; }
+                .rating-star:hover { transform: scale(1.15); }
+                .rating-radio:focus-visible + .rating-star { outline: 2px solid #06b6d4; outline-offset: 3px; border-radius: 4px; }
+            </style>
             <h3 class="text-2xl font-bold mb-2">Tinggalkan Testimoni</h3>
             <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Tulis kesan kamu tentang saya atau portofolio ini. Testimoni baru tampil setelah admin menyetujuinya.</p>
 
@@ -654,14 +667,115 @@
                     </select>
                 </div>
                 <div>
+                    <label class="block text-sm font-semibold mb-2">Penilaian</label>
+                    <div class="rating-input flex items-center" role="radiogroup" aria-label="Penilaian bintang">
+                        @for($i = 1; $i <= 5; $i++)
+                            <input type="radio" id="rating-{{ $i }}" name="testimonial_rating" value="{{ $i }}" class="rating-radio"
+                                {{ (string) old('testimonial_rating', '5') === (string) $i ? 'checked' : '' }}>
+                            <label for="rating-{{ $i }}" class="rating-star" data-value="{{ $i }}" title="{{ $i }} bintang">★</label>
+                        @endfor
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pilih 1 sampai 5 bintang. Default: 5 bintang.</p>
+                </div>
+                <div>
                     <label for="testimonial_message" class="block text-sm font-semibold mb-2">Isi Testimoni</label>
                     <textarea id="testimonial_message" name="testimonial_message" rows="5" placeholder="Ceritakan kesan kamu..."
                         class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-cyan-500 outline-none text-sm">{{ old('testimonial_message') }}</textarea>
                 </div>
+                <!-- Pratinjau langsung: testimoni akan tampil seperti ini di beranda -->
+                <div class="mt-2 pt-6 border-t border-slate-200 dark:border-slate-800">
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 mb-1">Pratinjau</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Testimoni Anda akan tampil seperti ini:</p>
+                    <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span id="preview-stars-filled" style="color:#fbbf24; letter-spacing:.12em; font-size:1.05rem;">★★★★★</span><span id="preview-stars-empty" style="color:#cbd5e1; letter-spacing:.12em; font-size:1.05rem;"></span>
+                            <span id="preview-rating-text" class="text-xs text-slate-500 dark:text-slate-400">5/5</span>
+                        </div>
+                        <p id="preview-message" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">Tulis testimoni kamu di atas untuk melihat pratinjau di sini.</p>
+                        <div class="flex items-center gap-3">
+                            <div id="preview-avatar" class="w-11 h-11 rounded-full bg-cyan-100 dark:bg-cyan-400/10 flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">A</div>
+                            <div>
+                                <p id="preview-name" class="font-bold text-sm">Nama Anda</p>
+                                <p id="preview-meta" class="text-xs text-slate-500 dark:text-slate-400">Peran • Kategori</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <button type="submit" class="w-full py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition">
                     Kirim Testimoni
                 </button>
             </form>
+
+            <script>
+                (function () {
+                    const form = document.querySelector('form[action="{{ route('testimonials.store') }}"]');
+                    if (!form) return;
+
+                    const radios = form.querySelectorAll('.rating-radio');
+                    const stars = form.querySelectorAll('.rating-star');
+                    const area = form.querySelector('.rating-input');
+
+                    const preview = {
+                        filled: document.getElementById('preview-stars-filled'),
+                        empty: document.getElementById('preview-stars-empty'),
+                        rating: document.getElementById('preview-rating-text'),
+                        message: document.getElementById('preview-message'),
+                        avatar: document.getElementById('preview-avatar'),
+                        name: document.getElementById('preview-name'),
+                        meta: document.getElementById('preview-meta'),
+                    };
+
+                    function selected() {
+                        const c = form.querySelector('.rating-radio:checked');
+                        return c ? c.value : '5';
+                    }
+
+                    function paint(value) {
+                        const val = Number(value);
+                        stars.forEach(function (star) {
+                            star.classList.toggle('is-active', Number(star.dataset.value) <= val);
+                        });
+                        if (preview.filled) {
+                            preview.filled.textContent = '★'.repeat(val);
+                            preview.empty.textContent = '★'.repeat(5 - val);
+                            preview.rating.textContent = val + '/5';
+                        }
+                    }
+
+                    function updateText() {
+                        if (!preview.name) return;
+                        const name = form.querySelector('[name="testimonial_name"]').value.trim();
+                        const role = form.querySelector('[name="testimonial_role"]').value.trim();
+                        const category = form.querySelector('[name="testimonial_category"]').value;
+                        const message = form.querySelector('[name="testimonial_message"]').value.trim();
+
+                        preview.name.textContent = name || 'Nama Anda';
+                        preview.avatar.textContent = name ? name.charAt(0).toUpperCase() : 'A';
+                        preview.meta.textContent = [role, category].filter(Boolean).join(' • ') || 'Peran • Kategori';
+                        preview.message.textContent = message || 'Tulis testimoni kamu di atas untuk melihat pratinjau di sini.';
+                    }
+
+                    paint(selected());
+                    updateText();
+
+                    radios.forEach(function (radio) {
+                        radio.addEventListener('change', function () { paint(this.value); });
+                    });
+                    stars.forEach(function (star) {
+                        star.addEventListener('mouseenter', function () { paint(this.dataset.value); });
+                    });
+                    area.addEventListener('mouseleave', function () { paint(selected()); });
+
+                    ['testimonial_name', 'testimonial_role', 'testimonial_message', 'testimonial_category'].forEach(function (field) {
+                        const input = form.querySelector('[name="' + field + '"]');
+                        if (input) {
+                            input.addEventListener('input', updateText);
+                            input.addEventListener('change', updateText);
+                        }
+                    });
+                })();
+            </script>
         </div>
     </div>
 </section>

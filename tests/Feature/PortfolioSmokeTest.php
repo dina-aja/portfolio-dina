@@ -88,11 +88,13 @@ class PortfolioSmokeTest extends TestCase
             'testimonial_name' => 'Uji Testimoni',
             'testimonial_role' => 'Siswa',
             'testimonial_category' => 'Teman',
+            'testimonial_rating' => 4,
             'testimonial_message' => 'Portfolio ini sangat rapi dan mudah dipahami.',
         ])->assertRedirect();
 
         $this->assertDatabaseHas('testimonials', [
             'name' => 'Uji Testimoni',
+            'rating' => 4,
             'is_approved' => false,
         ]);
 
@@ -104,11 +106,12 @@ class PortfolioSmokeTest extends TestCase
         $response = $this->from('/')->post('/testimoni', [
             'testimonial_name' => '',
             'testimonial_category' => '',
+            'testimonial_rating' => '',
             'testimonial_message' => 'pendek',
         ]);
 
         $response->assertRedirect('/');
-        $response->assertSessionHasErrors(['testimonial_name', 'testimonial_category', 'testimonial_message'], null, 'testimonial');
+        $response->assertSessionHasErrors(['testimonial_name', 'testimonial_category', 'testimonial_rating', 'testimonial_message'], null, 'testimonial');
         $this->assertDatabaseCount('testimonials', 0);
     }
 
@@ -117,6 +120,7 @@ class PortfolioSmokeTest extends TestCase
         $testimonial = Testimonial::create([
             'name' => 'Testimoni Menunggu',
             'category' => 'Teman',
+            'rating' => 5,
             'message' => 'Testimoni yang menunggu persetujuan admin.',
             'is_approved' => false,
         ]);
@@ -130,7 +134,7 @@ class PortfolioSmokeTest extends TestCase
             ->assertRedirect();
 
         $this->assertTrue($testimonial->fresh()->is_approved);
-        $this->get('/')->assertSee('Testimoni Menunggu');
+        $this->get('/')->assertSee('Testimoni Menunggu')->assertSee('5/5');
 
         $this->actingAs($user)
             ->patch('/admin/testimonials/' . $testimonial->id . '/approval')

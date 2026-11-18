@@ -38,6 +38,9 @@
                                         <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $item->{$column} ? 'bg-cyan-400/10 text-cyan-400' : 'bg-slate-800 text-slate-500' }}">
                                             {{ $item->{$column} ? 'Ya' : 'Tidak' }}
                                         </span>
+                                    @elseif($column === 'rating')
+                                        <span style="color:#fbbf24; letter-spacing:.08em;">{{ str_repeat('★', max(1, min(5, (int) $item->{$column}))) }}</span>
+                                        <span class="text-xs text-slate-500">{{ (int) $item->{$column} }}/5</span>
                                     @elseif($column === 'is_approved')
                                         <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $item->{$column} ? 'bg-emerald-400/10 text-emerald-400' : 'bg-amber-400/10 text-amber-400' }}">
                                             {{ $item->{$column} ? 'Tampil' : 'Menunggu' }}

@@ -21,10 +21,14 @@ class TestimonialController extends Controller
             'testimonial_name' => 'required|max:100',
             'testimonial_role' => 'nullable|max:150',
             'testimonial_category' => 'required|in:Guru Pembimbing,Teman,Pengguna,Tempat PLK,Lainnya',
+            'testimonial_rating' => 'required|integer|min:1|max:5',
             'testimonial_message' => 'required|min:10|max:1000',
         ], [
             'testimonial_name.required' => 'Nama wajib diisi.',
             'testimonial_category.required' => 'Kategori wajib dipilih.',
+            'testimonial_rating.required' => 'Penilaian bintang wajib dipilih.',
+            'testimonial_rating.min' => 'Penilaian minimal 1 bintang.',
+            'testimonial_rating.max' => 'Penilaian maksimal 5 bintang.',
             'testimonial_message.required' => 'Isi testimoni wajib ditulis.',
             'testimonial_message.min' => 'Testimoni minimal 10 karakter.',
             'testimonial_message.max' => 'Testimoni maksimal 1000 karakter.',
@@ -40,6 +44,7 @@ class TestimonialController extends Controller
             'name' => $data['testimonial_name'],
             'role' => $data['testimonial_role'] ?? null,
             'category' => $data['testimonial_category'],
+            'rating' => $data['testimonial_rating'],
             'message' => $data['testimonial_message'],
             'is_approved' => false,
         ]);
