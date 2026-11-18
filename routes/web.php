@@ -1,65 +1,74 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProjectController;
-use App\Models\Project;
-
-
-/*
-|--------------------------------------------------------------------------
-| USER / HALAMAN PORTFOLIO
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/', function () {
-
-    $projects = Project::latest()->get();
-
-    return view('welcome', compact('projects'));
-
-});
-
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CrudController;
+use App\Http\Controllers\CvController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\SettingsController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| LOGIN ADMIN
+| HALAMAN PORTFOLIO (PUBLIC)
 |--------------------------------------------------------------------------
 */
 
-// Halaman login
+Route::get('/', [PortfolioController::class, 'index'])->name('home');
+Route::get('/cv', [CvController::class, 'index'])->name('cv');
+Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::post('/kontak/pesan', [MessageController::class, 'store'])->name('messages.store');
+
+/*
+|--------------------------------------------------------------------------
+| AUTENTIKASI ADMIN
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-
-// Proses login
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
-
-// Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD ADMIN
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/dashboard', function () {
-
-    $projects = Project::latest()->get();
-
-    return view('dashboard', compact('projects'));
-
-})->middleware('auth');
-
-
-/*
-|--------------------------------------------------------------------------
-| CRUD PROJECT ADMIN
+| DASHBOARD & CMS ADMIN
 |--------------------------------------------------------------------------
 */
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('projects', ProjectController::class);
+    // Pesan masuk
+    Route::prefix('admin')->group(function () {
+        Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+        Route::get('/messages/{message}', [MessageController::class, 'show'])->name('messages.show');
+        Route::patch('/messages/{message}/read', [MessageController::class, 'markRead'])->name('messages.read');
+        Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
 
+        // Informasi profil / konten website
+        Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+
+        // CRUD semua konten portofolio
+        Route::get('/{resource}', [CrudController::class, 'index'])
+            ->whereIn('resource', array_keys(config('portfolio.crud')))
+            ->name('admin.index');
+        Route::get('/{resource}/create', [CrudController::class, 'create'])
+            ->whereIn('resource', array_keys(config('portfolio.crud')))
+            ->name('admin.create');
+        Route::post('/{resource}', [CrudController::class, 'store'])
+            ->whereIn('resource', array_keys(config('portfolio.crud')))
+            ->name('admin.store');
+        Route::get('/{resource}/{item}/edit', [CrudController::class, 'edit'])
+            ->whereIn('resource', array_keys(config('portfolio.crud')))
+            ->name('admin.edit');
+        Route::put('/{resource}/{item}', [CrudController::class, 'update'])
+            ->whereIn('resource', array_keys(config('portfolio.crud')))
+            ->name('admin.update');
+        Route::delete('/{resource}/{item}', [CrudController::class, 'destroy'])
+            ->whereIn('resource', array_keys(config('portfolio.crud')))
+            ->name('admin.destroy');
+    });
 });

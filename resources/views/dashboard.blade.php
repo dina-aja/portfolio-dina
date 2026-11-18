@@ -1,755 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('admin.layout')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+@section('title', 'Dashboard')
 
-    <title>Dina Portfolio</title>
+@section('content')
+@php
+    $counts = [
+        'projects' => \App\Models\Project::count(),
+        'certificates' => \App\Models\Certificate::count(),
+        'experiences' => \App\Models\Experience::count(),
+        'skills' => \App\Models\Skill::count(),
+        'testimonials' => \App\Models\Testimonial::count(),
+        'blog-posts' => \App\Models\BlogPost::count(),
+    ];
+    $recentMessages = \App\Models\Message::latest()->take(4)->get();
+@endphp
 
-    <style>
-
-    html {
-        scroll-behavior: smooth;
-    }
-
-    /* Fade Animation */
-    .fade-section {
-
-        opacity: 0;
-        transform: translateY(60px);
-        transition: all 1s ease;
-
-    }
-
-    .fade-section.show {
-
-        opacity: 1;
-        transform: translateY(0);
-
-    }
-
-    </style>
-
-</head>
-
-<body class="bg-black text-white scroll-smooth overflow-x-hidden">
-
-@if(session('success'))
-
-    <div id="popup-success"
-        class="fixed top-24 left-1/2 -translate-x-1/2 bg-cyan-400 text-black px-8 py-4 rounded-2xl shadow-2xl z-9999 font-bold">
-
-        {{ session('success') }}
-
+<div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+        <p class="text-cyan-400 text-sm font-bold uppercase tracking-widest mb-2">Halo, {{ Auth::user()->name }}</p>
+        <h1 class="text-3xl font-extrabold">Dashboard Admin</h1>
+        <p class="text-slate-400 text-sm mt-2">Kelola seluruh konten portfolio dari satu tempat. Perubahan langsung tampil di website.</p>
     </div>
 
-    <script>
-
-        setTimeout(() => {
-
-            const popup = document.getElementById('popup-success');
-
-            if (popup) {
-
-                popup.remove();
-
-            }
-
-        }, 3000);
-
-    </script>
-
-@endif
-
-    <!-- Navbar -->
-    <nav class="fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md z-50 border-b border-gray-800">
-
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-
-            <h1 class="text-2xl md:text-3xl font-bold text-cyan-400 tracking-wide">
-                Dina.
-            </h1>
-
-<!-- Desktop Menu -->
-<div class="hidden md:flex items-center gap-8 text-lg">
-
-    <a href="#home" class="hover:text-cyan-400 duration-300">
-        Beranda
-    </a>
-
-    <a href="#about" class="hover:text-cyan-400 duration-300">
-        Tentang Saya
-    </a>
-
-    <a href="#projects" class="hover:text-cyan-400 duration-300">
-        Proyek
-    </a>
-
-    <a href="#contact" class="hover:text-cyan-400 duration-300">
-        Kontak
-    </a>
-
-<!-- Admin Info -->
-<div class="flex items-center gap-4">
-
-    <!-- Logo Admin -->
-    <div class="w-11 h-11 rounded-full bg-cyan-400 flex items-center justify-center text-black font-bold text-lg shadow-lg">
-
-        D
-
-    </div>
-
-    <!-- Email + Role -->
-    <div class="leading-tight">
-
-        <p class="text-sm text-gray-300">
-            {{ Auth::user()->email }}
-        </p>
-
-        <p class="text-cyan-400 text-sm font-semibold">
-            Admin
-        </p>
-
-    </div>
-
-    <form action="{{ route('logout') }}" method="POST"
-    onsubmit="return confirm('Apakah kamu yakin ingin keluar?')">
-
-    @csrf
-
-    <button type="submit"
-        class="border border-red-500 text-red-400 px-4 py-2 rounded-xl hover:bg-red-500 hover:text-white duration-300">
-
-        Logout
-
-    </button>
-
-</form>
-
-</div>
-
-</div>
-
-            <!-- Hamburger -->
-            <button id="menu-btn" class="md:hidden flex flex-col gap-1">
-                <span class="w-7 h-1 bg-white rounded"></span>
-                <span class="w-7 h-1 bg-white rounded"></span>
-                <span class="w-7 h-1 bg-white rounded"></span>
-            </button>
-
+    <!-- Statistik -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800">
+            <p class="text-3xl font-extrabold text-cyan-400">{{ $counts['projects'] }}</p>
+            <p class="text-sm text-slate-400 mt-1">Proyek</p>
         </div>
-
-<!-- Mobile Menu -->
-<div id="mobile-menu"
-    class="hidden md:hidden bg-black border-t border-gray-800 px-6 py-6 space-y-5 text-center">
-
-    <a href="#home" class="block hover:text-cyan-400">
-        Beranda
-    </a>
-
-    <a href="#about" class="block hover:text-cyan-400">
-        Tentang Saya
-    </a>
-
-    <a href="#projects" class="block hover:text-cyan-400">
-        Proyek
-    </a>
-
-    <a href="#contact" class="block hover:text-cyan-400">
-        Kontak
-    </a>
-
-    <!-- Admin Mobile -->
-    <div class="border-t border-gray-800 pt-5">
-
-        <!-- Logo -->
-        <div class="w-16 h-16 mx-auto rounded-full bg-cyan-400 flex items-center justify-center text-black font-bold text-2xl shadow-lg mb-3">
-
-            D
-
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800">
+            <p class="text-3xl font-extrabold text-cyan-400">{{ $counts['certificates'] }}</p>
+            <p class="text-sm text-slate-400 mt-1">Sertifikat</p>
         </div>
-
-        <!-- Email -->
-        <p class="text-gray-300 text-sm break-all">
-            {{ Auth::user()->email }}
-        </p>
-
-        <p class="text-cyan-400 font-semibold mb-5">
-            Admin
-        </p>
-
-        <!-- Logout -->
-        <form action="{{ route('logout') }}" method="POST"
-    onsubmit="return confirm('Apakah kamu yakin ingin keluar?')">
-
-    @csrf
-
-    <button type="submit"
-        class="w-full border border-red-500 text-red-400 py-3 rounded-xl hover:bg-red-500 hover:text-white duration-300">
-
-        Logout
-
-    </button>
-
-</form>
-
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800">
+            <p class="text-3xl font-extrabold text-cyan-400">{{ $counts['skills'] }}</p>
+            <p class="text-sm text-slate-400 mt-1">Keahlian</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800">
+            <p class="text-3xl font-extrabold text-cyan-400">{{ $messageCount }}</p>
+            <p class="text-sm text-slate-400 mt-1">Pesan Belum Dibaca</p>
+        </div>
     </div>
 
-</div>
-
-    </nav>
-
-
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center px-6 pt-24 fade-section">
-
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-14 items-center">
-
-            <div class="order-2 md:order-1 text-center md:text-left">
-
-                <p class="text-cyan-400 text-xl mb-4 tracking-widest uppercase">
-                    Selamat Datang, Admin
-                </p>
-
-                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
-                    Halo, Saya
-                    <span class="text-cyan-400 block mt-2">
-                        Dina
-                    </span>
-                </h1>
-
-                <h2 class="text-2xl md:text-3xl text-gray-300 mb-6">
-                    Front-End Developer & UI/UX Designer
-                </h2>
-
-                <p class="text-gray-400 leading-relaxed text-lg mb-10 max-w-xl mx-auto md:mx-0">
-                Saya adalah Front-End Developer dan UI Designer yang memiliki semangat belajar tinggi dalam membuat website modern, responsive, dan interaktif menggunakan teknologi web terbaru.
-                </p>
-
-                <div class="flex flex-wrap gap-4 justify-center md:justify-start">
-
-                    <a href="#projects"
-                        class="bg-cyan-400 text-black px-7 py-4 rounded-2xl font-bold hover:scale-105 duration-300 shadow-lg shadow-cyan-400/30">
-                        Proyek
+    <div class="grid lg:grid-cols-3 gap-6">
+        <!-- Kelola konten -->
+        <div class="lg:col-span-2 p-6 rounded-2xl bg-slate-900 border border-slate-800">
+            <h2 class="text-xl font-bold mb-5">Kelola Konten</h2>
+            <div class="grid sm:grid-cols-2 gap-3">
+                @foreach($sections as $key => $section)
+                    <a href="{{ route('admin.index', ['resource' => $key]) }}"
+                        class="flex items-center justify-between p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-400 transition">
+                        <div>
+                            <p class="font-bold text-sm">{{ $section['title'] }}</p>
+                            <p class="text-xs text-slate-500 mt-1">{{ $counts[$key] ?? 0 }} data</p>
+                        </div>
+                        <span class="text-cyan-400">→</span>
                     </a>
-
-                    <a href="#contact"
-                        class="border border-cyan-400 px-7 py-4 rounded-2xl text-cyan-400 hover:bg-cyan-400 hover:text-black duration-300">
-                        Kontak
-                    </a>
-
-                </div>
-
+                @endforeach
             </div>
-
-            <!-- Foto -->
-            <div class="flex justify-center order-1 md:order-2">
-
-                <div class="relative">
-
-                    <div class="absolute inset-0 bg-cyan-400 blur-3xl opacity-30 rounded-full animate-pulse"></div>
-
-                    <img src="{{ asset('images/dina.jpg') }}"
-                        class="relative w-72 h-72 md:w-105 md:h-105 object-cover rounded-full border-4 border-cyan-400 shadow-2xl">
-
-                </div>
-
-            </div>
-
         </div>
 
-    </section>
-
-
-<!-- About -->
-<section id="about" class="py-28 px-6 bg-[#020817] fade-section">
-
-    <div class="max-w-7xl mx-auto">
-
-        <!-- Judul -->
-        <h2 class="text-5xl md:text-6xl font-extrabold text-center mb-20">
-            Tentang
-            <span class="text-cyan-400">
-                Saya
-            </span>
-        </h2>
-
-        <div class="grid lg:grid-cols-2 gap-14 items-center">
-
-            <!-- Kiri -->
-            <div class="relative">
-
-                <!-- Card -->
-                <div class="relative bg-cyan-500 rounded-[35px] h-130 flex items-center justify-center overflow-hidden">
-
-                    <!-- Foto -->
-                    <img src="{{ asset('images/DINA 2.jpg') }}"
-                        class="w-full h-full object-cover">
-
+        <!-- Aksi cepat -->
+        <div class="space-y-6">
+            <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+                <h2 class="text-xl font-bold mb-4">Aksi Cepat</h2>
+                <div class="space-y-2">
+                    <a href="{{ route('settings.edit') }}" class="block px-4 py-3 rounded-xl bg-cyan-400/10 text-cyan-400 text-sm font-bold hover:bg-cyan-400 hover:text-slate-950 transition">⚙️ Edit Profil & Konten</a>
+                    <a href="{{ route('admin.create', ['resource' => 'projects']) }}" class="block px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-sm font-bold hover:border-cyan-400 transition">+ Tambah Proyek Baru</a>
+                    <a href="{{ route('messages.index') }}" class="block px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-sm font-bold hover:border-cyan-400 transition">✉️ Lihat Pesan Masuk</a>
+                    <a href="{{ route('home') }}" target="_blank" class="block px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-sm font-bold hover:border-cyan-400 transition">🌐 Lihat Website ↗</a>
                 </div>
-
             </div>
 
-
-            <!-- Kanan -->
-            <div>
-
-                <h3 class="text-3xl md:text-4xl font-bold leading-snug mb-8">
-                    Front-End Developer & Designer 
-                </h3>
-
-                <p class="text-gray-400 text-lg leading-relaxed mb-10">
-                    Saya adalah siswi jurusan PPLG yang aktif mengembangkan kemampuan dalam pembuatan website modern menggunakan Laravel dan Tailwind CSS. Saya juga tertarik pada desain UI/UX dan teknologi web modern.
-                </p>
-
-
-                <!-- Info Box -->
-                <div class="grid sm:grid-cols-2 gap-5 mb-10">
-
-                    <!-- Nama -->
-                    <div class="bg-[#0B1220] border border-gray-800 rounded-2xl p-5">
-
-                        <p class="text-gray-400 text-sm mb-2">
-                            NAMA
-                        </p>
-
-                        <h4 class="font-semibold text-lg">
-                            Dina
-                        </h4>
-
-                    </div>
-
-                    <!-- Email -->
-                    <div class="bg-[#0B1220] border border-gray-800 rounded-2xl p-5">
-
-                        <p class="text-gray-400 text-sm mb-2">
-                            EMAIL
-                        </p>
-
-                        <h4 class="font-semibold text-lg break-all">
-                            dinadinaa639@gmail.com
-                        </h4>
-
-                    </div>
-
-                    <!-- Telepon -->
-                    <div class="bg-[#0B1220] border border-gray-800 rounded-2xl p-5">
-
-                        <p class="text-gray-400 text-sm mb-2">
-                            TELEPON
-                        </p>
-
-                        <h4 class="font-semibold text-lg">
-                            +62 857-5171-4154
-                        </h4>
-
-                    </div>
-
-                    <!-- Instagram -->
-                    <div class="bg-[#0B1220] border border-gray-800 rounded-2xl p-5">
-
-                        <p class="text-gray-400 text-sm mb-2">
-                            Instagram
-                        </p>
-
-                        <h4 class="font-semibold text-lg">
-                            @ddina597
-                        </h4>
-
-                    </div>
-
-                    <!-- Usia -->
-                    <div class="bg-[#0B1220] border border-gray-800 rounded-2xl p-5">
-
-                        <p class="text-gray-400 text-sm mb-2">
-                            Usia
-                        </p>
-
-                        <h4 class="font-semibold text-lg">
-                            17 Tahun
-                        </h4>
-
-                    </div>
-
-                    <!-- Lokasi -->
-                    <div class="bg-[#0B1220] border border-gray-800 rounded-2xl p-5">
-
-                        <p class="text-gray-400 text-sm mb-2">
-                            LOKASI
-                        </p>
-
-                        <h4 class="font-semibold text-lg">
-                            Banjarmasin
-                        </h4>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- Projects -->
-<section id="projects" class="py-28 px-6 fade-section">
-
-<div class="relative mb-16">
-
-<!-- Judul Tengah -->
-<div class="text-center">
-
-    <h2 class="text-5xl font-bold">
-        Proyek
-        <span class="text-cyan-400">
-            Saya
-        </span>
-    </h2>
-
-    <p class="text-gray-400 mt-4">
-        Beberapa project website yang pernah saya buat.
-    </p>
-
-</div>
-
-<!-- Tombol Tambah -->
-<a href="{{ route('projects.create') }}"
-    class="absolute right-0 top-1/2 -translate-y-1/2 bg-cyan-400 text-black px-6 py-3 rounded-2xl font-bold hover:scale-105 duration-300 hidden md:block">
-
-    + Tambah Project
-
-</a>
-
-</div>
-
-        <!-- Card Project -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-
-            @foreach($projects as $project)
-
-            <div class="bg-gray-950 border border-gray-800 rounded-[10px] overflow-hidden hover:-translate-y-3 hover:border-cyan-400 duration-300 shadow-xl">
-
-                <!-- Gambar -->
-                <img src="{{ asset('storage/' . $project->image) }}" class="w-full h-56 object-cover">
-
-                <div class="p-7">
-
-                    <!-- Judul -->
-                    <h3 class="text-2xl font-bold mb-4">
-                        {{ $project->title }}
-                    </h3>
-
-                    <!-- Deskripsi -->
-                    <p class="text-gray-400 leading-relaxed mb-6">
-                        {{ $project->description }}
-                    </p>
-
-                    <!-- Button -->
-                    <div class="flex flex-wrap gap-3">
-
-                        <!-- Demo -->
-                        <a href="{{ $project->demo }}"
-                            target="_blank"
-                            class="bg-cyan-400 text-black px-5 py-3 rounded-xl font-semibold hover:scale-105 duration-300">
-
-                            Lihat Project
-
+            <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+                <h2 class="text-lg font-bold mb-4">Pesan Terbaru</h2>
+                <div class="space-y-3">
+                    @forelse($recentMessages as $message)
+                        <a href="{{ route('messages.show', $message) }}" class="block p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-400 transition">
+                            <div class="flex justify-between gap-2">
+                                <p class="font-bold text-sm truncate">{{ $message->name }}</p>
+                                <span class="text-xs text-slate-500 shrink-0">{{ $message->created_at->diffForHumans() }}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 truncate mt-1">{{ $message->subject ?: $message->message }}</p>
                         </a>
-
-                        <!-- Edit -->
-                        <a href="{{ route('projects.edit', $project->id) }}"
-                            class="bg-yellow-400 text-black px-5 py-3 rounded-xl font-semibold hover:scale-105 duration-300">
-
-                            Edit
-
-                        </a>
-
-                        <!-- Hapus -->
-                        <form action="{{ route('projects.destroy', $project->id) }}"
-                            method="POST">
-
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit"
-                                onclick="return confirm('Yakin ingin menghapus project ini?')"
-                                class="bg-red-500 text-white px-5 py-3 rounded-xl font-semibold hover:scale-105 duration-300">
-
-                                Hapus
-
-                            </button>
-
-                        </form>
-
-                    </div>
-
+                    @empty
+                        <p class="text-sm text-slate-500">Belum ada pesan.</p>
+                    @endforelse
                 </div>
-
             </div>
-
-            @endforeach
-
         </div>
-
     </div>
-
-</section>
-
-
-<!-- Contact -->
-<section id="contact" class="py-28 px-6 bg-linear-to-b from-gray-950 to-black fade-section">
-
-    <div class="max-w-7xl mx-auto">
-
-        <!-- Judul -->
-        <div class="text-center mb-20">
-
-            <h2 class="text-5xl md:text-6xl font-bold mb-6">
-                Kontak
-                <span class="text-cyan-400">
-                    Saya
-                </span>
-            </h2>
-
-            <p class="text-gray-400 text-lg">
-                Mari bekerja sama dan membuat project website modern bersama.
-            </p>
-
-        </div>
-
-
-        <!-- Card Contact -->
-        <div class="grid md:grid-cols-2 gap-5">
-
-            <!-- Instagram -->
-            <a href="https://instagram.com/ddina597" target="_blank"
-                class="bg-[#0B1220] border border-gray-800 p-6 rounded-[25px] hover:-translate-y-2 hover:border-cyan-400 duration-300 relative overflow-hidden group">
-
-                <!-- Icon -->
-                <div class="w-16 h-16 rounded-2xl border border-gray-700 flex items-center justify-center mb-6">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="w-8 h-8 text-cyan-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke-width="1.5"/>
-                        <path stroke-width="1.5" d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
-                        <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
-
-                    </svg>
-
-                </div>
-
-                <!-- Arrow -->
-                <span class="absolute top-6 right-6 text-3xl text-gray-600 group-hover:text-cyan-400 duration-300">
-                    ↗
-                </span>
-
-                <h3 class="text-3xl font-bold mb-3">
-                    Instagram
-                </h3>
-
-                <p class="uppercase tracking-[3px] text-gray-500 mb-4 text-xs">
-                    Ikuti update harian saya
-                </p>
-
-                <p class="text-lg text-gray-300">
-                    @dina597
-                </p>
-
-            </a>
-
-
-            <!-- WhatsApp -->
-            <a href="https://wa.me/6285751714154" target="_blank"
-                class="bg-[#0B1220] border border-gray-800 p-6 rounded-[25px] hover:-translate-y-2 hover:border-cyan-400 duration-300 relative overflow-hidden group">
-
-                <!-- Icon -->
-                <div class="w-16 h-16 rounded-2xl border border-gray-700 flex items-center justify-center mb-6">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="w-8 h-8 text-cyan-400"
-                        fill="currentColor"
-                        viewBox="0 0 24 24">
-
-                        <path d="M20.52 3.48A11.79 11.79 0 0012.04 0C5.5 0 .18 5.3.18 11.82c0 2.08.55 4.1 1.6 5.87L0 24l6.5-1.7a11.83 11.83 0 005.54 1.4h.01c6.53 0 11.85-5.3 11.85-11.82 0-3.15-1.23-6.11-3.38-8.4z"/>
-
-                    </svg>
-
-                </div>
-
-                <!-- Arrow -->
-                <span class="absolute top-6 right-6 text-3xl text-gray-600 group-hover:text-cyan-400 duration-300">
-                    ↗
-                </span>
-
-                <h3 class="text-3xl font-bold mb-3">
-                    WhatsApp
-                </h3>
-
-                <p class="uppercase tracking-[3px] text-gray-500 mb-4 text-xs">
-                    Hubungi saya secara langsung
-                </p>
-
-                <p class="text-lg text-gray-300">
-                    +62 857-5171-4154
-                </p>
-
-            </a>
-
-
-            <!-- Github -->
-            <a href="https://github.com/dina-aja" target="_blank"
-                class="bg-[#0B1220] border border-gray-800 p-6 rounded-[25px] hover:-translate-y-2 hover:border-cyan-400 duration-300 relative overflow-hidden group">
-
-                <!-- Icon -->
-                <div class="w-16 h-16 rounded-2xl border border-gray-700 flex items-center justify-center mb-6">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="w-8 h-8 text-cyan-400"
-                        fill="currentColor"
-                        viewBox="0 0 24 24">
-
-                        <path fill-rule="evenodd"
-                            d="M12 2C6.48 2 2 6.58 2 12.24c0 4.52 2.87 8.35 6.84 9.7"/>
-
-                    </svg>
-
-                </div>
-
-                <!-- Arrow -->
-                <span class="absolute top-6 right-6 text-3xl text-gray-600 group-hover:text-cyan-400 duration-300">
-                    ↗
-                </span>
-
-                <h3 class="text-3xl font-bold mb-3">
-                    Github
-                </h3>
-
-                <p class="uppercase tracking-[3px] text-gray-500 mb-4 text-xs">
-                    Lihat repository project saya
-                </p>
-
-                <p class="text-lg text-gray-300">
-                    Dina
-                </p>
-
-            </a>
-
-
-            <!-- Email -->
-            <a href="mailto:dinadinaa639@gmail.com" target="_blank"
-                class="bg-[#0B1220] border border-gray-800 p-6 rounded-[25px] hover:-translate-y-2 hover:border-cyan-400 duration-300 relative overflow-hidden group">
-
-                <!-- Icon -->
-                <div class="w-16 h-16 rounded-2xl border border-gray-700 flex items-center justify-center mb-6">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="w-8 h-8 text-cyan-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-
-                        <path stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="1.5"
-                            d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8m-18 8h18V8H3v8z" />
-
-                    </svg>
-
-                </div>
-
-                <!-- Arrow -->
-                <span class="absolute top-6 right-6 text-3xl text-gray-600 group-hover:text-cyan-400 duration-300">
-                    ↗
-                </span>
-
-                <h3 class="text-3xl font-bold mb-3">
-                    Email
-                </h3>
-
-                <p class="uppercase tracking-[3px] text-gray-500 mb-4 text-xs">
-                    Hubungi saya melalui email
-                </p>
-
-                <p class="text-lg text-gray-300 break-all">
-                    dinadinaa639@gmail.com
-                </p>
-
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-    <!-- Footer -->
-    <footer class="py-8 border-t border-gray-800 text-center text-gray-500">
-        © 2026 Dina Portfolio. All Rights Reserved.
-    </footer>
-
-
-    <!-- Script Hamburger -->
-    <script>
-
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-            // Auto close mobile menu
-    document.querySelectorAll('#mobile-menu a').forEach(link => {
-
-link.addEventListener('click', () => {
-
-    mobileMenu.classList.add('hidden');
-
-});
-
-});
-
-// Fade Animation Repeat
-const fadeSections = document.querySelectorAll('.fade-section');
-
-const observer = new IntersectionObserver((entries) => {
-
-    entries.forEach((entry) => {
-
-        if (entry.isIntersecting) {
-
-            entry.target.classList.add('show');
-
-        } else {
-
-            entry.target.classList.remove('show');
-
-        }
-
-    });
-
-}, {
-    threshold: 0.15
-});
-
-fadeSections.forEach((section) => {
-
-    observer.observe(section);
-
-});
-
-    </script>
-
-</body>
-</html>
+</div>
+@endsection
