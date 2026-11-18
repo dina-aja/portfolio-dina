@@ -157,12 +157,15 @@ Cek tab **Logs** → tidak boleh ada `Fatal error` atau `SQLSTATE`.
 
 ```bash
 # edit file, lalu:
-git add -A
+npm run build          # wajib kalau mengubah CSS/JS
+git add -A             # termasuk public/build yang ikut ter-commit
 git commit -m "Deskripsi perubahan"
 git push origin main
 ```
 
 Railway otomatis build & deploy. Tunggu beberapa menit, lalu refresh browser dengan `Ctrl+F5`.
+
+> `public/build/manifest.json` dan file CSS/JS di dalamnya **sengaja disimpan di Git** sebagai cadangan. Kalau build di Railway gagal, aset dari repo tetap dipakai sehingga tampilan tidak rusak. Karena itu, setiap kali mengubah `resources/css/app.css`, jalankan `npm run build` dan ikutkan hasilnya saat commit.
 
 ### Mengubah konten
 
@@ -180,7 +183,7 @@ Railway → service MySQL → tab **Backups** → aktifkan backup otomatis. Disa
 | Gejala | Penyebab & solusi |
 | --- | --- |
 | Halaman 500 | Cek Logs. Pastikan `APP_KEY` terisi dan variabel DB benar. |
-| Tampilan tanpa CSS | Build gagal. Cek log build, pastikan `npm run build` berjalan. |
+| Tampilan tanpa CSS / hanya teks | Pastikan `public/build/manifest.json` dan `public/build/assets/app-*.css` ada di GitHub (sekarang ikut di-commit). Buka `https://domain-anda/build/assets/app-*.css`; kalau 404, jalankan `npm run build` lalu commit + push. Terakhir, refresh dengan `Ctrl+F5`. |
 | Gambar 404 | Volume belum terpasang di `/app/storage/app/public`, atau jalankan ulang deploy agar `storage:link` dibuat. |
 | Login gagal / logout sendiri | Pastikan `SESSION_DRIVER=database` dan migrasi `sessions` berhasil. |
 | Data berubah sendiri setelah redeploy | `RailwaySeeder` hanya jalan saat tabel `settings` kosong. Cek apakah data memang terhapus. |

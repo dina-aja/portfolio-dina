@@ -13,7 +13,8 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
+# Aset hasil `npm run build` SENGAJA di-commit agar CSS selalu tersedia di Railway
+# walaupun langkah build di server gagal. Jalankan `npm run build` setelah mengubah CSS.
 /public/hot
 /public/storage
 /storage/*.key
