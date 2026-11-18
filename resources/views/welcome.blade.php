@@ -14,7 +14,9 @@
         }
     </script>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Aset statis dengan nama tetap: tidak bergantung pada manifest Vite di server -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script type="module" src="{{ asset('js/app.js') }}"></script>
 </head>
 
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 overflow-x-hidden selection:bg-cyan-400 selection:text-slate-950">

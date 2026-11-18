@@ -14,7 +14,9 @@
 /auth.json
 /node_modules
 # Aset hasil `npm run build` SENGAJA di-commit agar CSS selalu tersedia di Railway
-# walaupun langkah build di server gagal. Jalankan `npm run build` setelah mengubah CSS.
+# walaupun langkah build di server gagal. Jalankan `npm run build` setelah mengubah CSS:
+#   public/css/app.css + public/js/app.js -> dipakai langsung oleh Blade (path tetap)
+#   public/build/*                        -> hasil mentah Vite + manifest
 /public/hot
 /public/storage
 /storage/*.key

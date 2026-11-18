@@ -28,6 +28,7 @@ File yang sudah disiapkan untuk Railway:
 - `railway/init-app.sh` — migrasi, seed awal, storage link, cache
 - `database/seeders/RailwaySeeder.php` — seed hanya saat database kosong
 - `app/helpers.php` — fallback gambar yang belum tersedia
+- `public/css/app.css` + `public/js/app.js` — aset dengan **nama tetap**, dipanggil langsung oleh Blade. Tidak bergantung pada manifest Vite, jadi CSS tetap tampil walau build di Railway gagal.
 
 ---
 
@@ -165,7 +166,7 @@ git push origin main
 
 Railway otomatis build & deploy. Tunggu beberapa menit, lalu refresh browser dengan `Ctrl+F5`.
 
-> `public/build/manifest.json` dan file CSS/JS di dalamnya **sengaja disimpan di Git** sebagai cadangan. Kalau build di Railway gagal, aset dari repo tetap dipakai sehingga tampilan tidak rusak. Karena itu, setiap kali mengubah `resources/css/app.css`, jalankan `npm run build` dan ikutkan hasilnya saat commit.
+> `npm run build` sekarang melakukan dua hal: `vite build` **dan** menyalin hasilnya ke `public/css/app.css` + `public/js/app.js` (nama tetap, tanpa hash). Kedua file itu **sengaja disimpan di Git**. Blade memanggil langsung `/css/app.css`, jadi tidak ada ketergantungan pada `manifest.json` di server. Setiap kali mengubah CSS/JS, jalankan `npm run build` lalu commit semua hasilnya.
 
 ### Mengubah konten
 
@@ -183,7 +184,7 @@ Railway → service MySQL → tab **Backups** → aktifkan backup otomatis. Disa
 | Gejala | Penyebab & solusi |
 | --- | --- |
 | Halaman 500 | Cek Logs. Pastikan `APP_KEY` terisi dan variabel DB benar. |
-| Tampilan tanpa CSS / hanya teks | Pastikan `public/build/manifest.json` dan `public/build/assets/app-*.css` ada di GitHub (sekarang ikut di-commit). Buka `https://domain-anda/build/assets/app-*.css`; kalau 404, jalankan `npm run build` lalu commit + push. Terakhir, refresh dengan `Ctrl+F5`. |
+| Tampilan tanpa CSS / hanya teks | Buka `https://domain-anda/css/app.css` — harus menampilkan teks CSS. Kalau 404: jalankan `npm run build` di komputer, lalu `git add -A && git commit -m "Fix CSS" && git push`. Tunggu deploy Railway sukses, lalu `Ctrl+F5`. |
 | Gambar 404 | Volume belum terpasang di `/app/storage/app/public`, atau jalankan ulang deploy agar `storage:link` dibuat. |
 | Login gagal / logout sendiri | Pastikan `SESSION_DRIVER=database` dan migrasi `sessions` berhasil. |
 | Data berubah sendiri setelah redeploy | `RailwaySeeder` hanya jalan saat tabel `settings` kosong. Cek apakah data memang terhapus. |
