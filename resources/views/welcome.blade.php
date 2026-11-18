@@ -155,20 +155,9 @@
                 {{ $settings['tagline'] }}
             </h3>
 
-            <!-- Narasi biodata digabung dengan data profil yang dahulu tampil sebagai 6 kotak -->
-            <div class="space-y-4 text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
+            <!-- Narasi utama. Seluruh identitas sudah disatuikan di sini agar tidak duplikat. -->
+            <div class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
                 <p>{!! nl2br(e($settings['about_biodata'])) !!}</p>
-                <p>
-                    Saya bernama
-                    <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['full_name'] }}</strong>,
-                    siswa kelas <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['class'] }}</strong>
-                    pada kompetensi keahlian
-                    <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['competency'] }}</strong>
-                    di <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['school'] }}</strong>.
-                    Saya berdomisili di <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['location'] }}</strong>
-                    dan dapat dihubungi melalui email
-                    <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['email'] }}</strong>.
-                </p>
             </div>
 
             <!-- Dua kotak tersisa ditempatkan di bawah narasi -->
