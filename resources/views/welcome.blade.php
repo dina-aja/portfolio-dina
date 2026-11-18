@@ -148,38 +148,31 @@
             <h2 class="text-3xl sm:text-5xl font-extrabold">Kenalan Lebih Dekat</h2>
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-10 items-start">
-            <div class="space-y-6">
-                <h3 class="text-2xl sm:text-3xl font-bold leading-snug">
-                    {{ $settings['tagline'] }}
-                </h3>
-                <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
-                    {!! nl2br(e($settings['about_biodata'])) !!}
-                </p>
+        <div class="max-w-4xl mx-auto space-y-6">
+            <h3 class="text-2xl sm:text-3xl font-bold leading-snug">
+                {{ $settings['tagline'] }}
+            </h3>
 
-                <div class="grid grid-cols-2 gap-3">
-                    @foreach([
-                        ['Nama', $settings['full_name']],
-                        ['Kelas', $settings['class']],
-                        ['Kompetensi', $settings['competency']],
-                        ['Sekolah', $settings['school']],
-                        ['Lokasi', $settings['location']],
-                        ['Email', $settings['email']],
-                    ] as [$label, $value])
-                        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
-                            <p class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">{{ $label }}</p>
-                            <p class="font-semibold text-sm break-words">{{ $value }}</p>
-                        </div>
-                    @endforeach
-                </div>
+            <!-- Narasi biodata digabung dengan data profil yang dahulu tampil sebagai 6 kotak -->
+            <div class="space-y-4 text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
+                <p>{!! nl2br(e($settings['about_biodata'])) !!}</p>
+                <p>
+                    Saya bernama
+                    <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['full_name'] }}</strong>,
+                    siswa kelas <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['class'] }}</strong>
+                    pada kompetensi keahlian
+                    <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['competency'] }}</strong>
+                    di <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['school'] }}</strong>.
+                    Saya berdomisili di <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['location'] }}</strong>
+                    dan dapat dihubungi melalui email
+                    <strong class="font-semibold text-slate-900 dark:text-white">{{ $settings['email'] }}</strong>.
+                </p>
             </div>
 
-            <div class="grid sm:grid-cols-2 gap-4">
+            <!-- Dua kotak tersisa ditempatkan di bawah narasi -->
+            <div class="grid sm:grid-cols-2 gap-4 pt-2">
                 @foreach([
                     ['🎓', 'Riwayat Pendidikan', $settings['education']],
-                    ['🚀', 'Minat & Teknologi', $settings['interests']],
-                    ['🏛️', 'Organisasi & Kepanitiaan', $settings['organization']],
-                    ['💼', 'Pengalaman PLK', $settings['plk']],
                     ['🎯', 'Cita-cita / Tujuan Karir', $settings['career_goal']],
                 ] as [$icon, $title, $body])
                     <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 hover:border-cyan-400 transition">

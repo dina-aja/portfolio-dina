@@ -6,7 +6,7 @@ Website portfolio siswa berbasis **Laravel + Tailwind CSS 4** dengan dashboard a
 
 ### Halaman Publik (`/`)
 - Beranda: foto profil, nama lengkap, kelas & kompetensi keahlian, personal branding, keahlian utama, tombol Lihat Portfolio / Lihat CV / Hubungi Saya
-- Tentang Saya: biodata, riwayat pendidikan, minat & bidang teknologi, organisasi/kepanitiaan, pengalaman PLK, cita-cita/karir
+- Tentang Saya: narasi biodata yang menyatu dengan data profil (nama, kelas, kompetensi, sekolah, lokasi, email), lalu 2 kotak di bawahnya — riwayat pendidikan dan cita-cita/karir
 - Keahlian: hard skill & soft skill dengan persentase
 - Galeri proyek: pencarian, filter kategori, preview & detail proyek (masalah, tujuan, teknologi, peran, fitur, cerita proses, dokumentasi, feedback, demo, GitHub)
 - Sertifikat & prestasi dengan dokumentasi gambar (lightbox)
