@@ -20,7 +20,7 @@ class PortfolioController extends Controller
             'certificates' => Certificate::latest()->get(),
             'experiences' => Experience::all(),
             'skills' => Skill::orderBy('category')->orderByDesc('percentage')->get(),
-            'testimonials' => Testimonial::latest()->get(),
+            'testimonials' => Testimonial::approved()->latest()->get(),
             'blogPosts' => BlogPost::whereNotNull('published_at')
                 ->latest('published_at')
                 ->get(),

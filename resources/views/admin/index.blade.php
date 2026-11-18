@@ -38,6 +38,10 @@
                                         <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $item->{$column} ? 'bg-cyan-400/10 text-cyan-400' : 'bg-slate-800 text-slate-500' }}">
                                             {{ $item->{$column} ? 'Ya' : 'Tidak' }}
                                         </span>
+                                    @elseif($column === 'is_approved')
+                                        <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $item->{$column} ? 'bg-emerald-400/10 text-emerald-400' : 'bg-amber-400/10 text-amber-400' }}">
+                                            {{ $item->{$column} ? 'Tampil' : 'Menunggu' }}
+                                        </span>
                                     @elseif($column === 'image')
                                         @if($item->{$column})
                                             <img src="{{ stored_image($item->{$column}) }}" class="w-14 h-12 object-cover rounded-lg" alt="">
@@ -51,6 +55,16 @@
                             @endforeach
                             <td class="px-5 py-4">
                                 <div class="flex justify-end gap-2">
+                                    @if(!empty($config['approvable']))
+                                        <form method="POST" action="{{ route('testimonials.approval', $item->id) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                class="px-3 py-2 rounded-lg text-xs font-bold transition {{ $item->is_approved ? 'bg-slate-700 border border-slate-600 text-slate-300 hover:bg-slate-600' : 'bg-emerald-400/10 border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400 hover:text-slate-950' }}">
+                                                {{ $item->is_approved ? 'Sembunyikan' : 'Setujui tampil' }}
+                                            </button>
+                                        </form>
+                                    @endif
                                     <a href="{{ route('admin.edit', ['resource' => $resource, 'item' => $item->id]) }}"
                                         class="px-3 py-2 rounded-lg bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-bold hover:bg-amber-400 hover:text-slate-950 transition">Edit</a>
                                     <form method="POST" action="{{ route('admin.destroy', ['resource' => $resource, 'item' => $item->id]) }}"

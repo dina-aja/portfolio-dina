@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TestimonialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,7 @@ Route::get('/', [PortfolioController::class, 'index'])->name('home');
 Route::get('/cv', [CvController::class, 'index'])->name('cv');
 Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::post('/kontak/pesan', [MessageController::class, 'store'])->name('messages.store');
+Route::post('/testimoni', [TestimonialController::class, 'store'])->name('testimonials.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +48,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/messages/{message}', [MessageController::class, 'show'])->name('messages.show');
         Route::patch('/messages/{message}/read', [MessageController::class, 'markRead'])->name('messages.read');
         Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
+
+        // Persetujuan testimoni pengunjung (didefinisikan sebelum CRUD generik)
+        Route::patch('/testimonials/{testimonial}/approval', [TestimonialController::class, 'toggleApproval'])
+            ->name('testimonials.approval');
 
         // Informasi profil / konten website
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');

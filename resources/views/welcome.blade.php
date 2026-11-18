@@ -43,9 +43,9 @@
             <a href="#projects" class="nav-link hover:text-cyan-600 dark:hover:text-cyan-400 transition">Proyek</a>
             <a href="#certificates" class="nav-link hover:text-cyan-600 dark:hover:text-cyan-400 transition">Sertifikat</a>
             <a href="#experience" class="nav-link hover:text-cyan-600 dark:hover:text-cyan-400 transition">Pengalaman</a>
-            <a href="#testimonials" class="nav-link hover:text-cyan-600 dark:hover:text-cyan-400 transition">Testimoni</a>
             <a href="#blog" class="nav-link hover:text-cyan-600 dark:hover:text-cyan-400 transition">Blog</a>
             <a href="#contact" class="nav-link hover:text-cyan-600 dark:hover:text-cyan-400 transition">Kontak</a>
+            <a href="#testimonials" class="nav-link hover:text-cyan-600 dark:hover:text-cyan-400 transition">Testimoni</a>
         </div>
 
         <div class="flex items-center gap-3">
@@ -75,9 +75,9 @@
             <a href="#projects" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Proyek</a>
             <a href="#certificates" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Sertifikat</a>
             <a href="#experience" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Pengalaman</a>
-            <a href="#testimonials" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Testimoni</a>
             <a href="#blog" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Blog</a>
             <a href="#contact" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Kontak</a>
+            <a href="#testimonials" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Testimoni</a>
         </div>
     </div>
 </nav>
@@ -449,42 +449,6 @@
     </div>
 </section>
 
-<!-- ================= TESTIMONI ================= -->
-<section id="testimonials" class="py-24 px-5 sm:px-6 bg-slate-100/70 dark:bg-slate-900/50">
-    <div class="max-w-7xl mx-auto reveal">
-        <div class="text-center mb-12">
-            <p class="text-cyan-600 dark:text-cyan-400 font-bold uppercase tracking-[0.2em] text-sm mb-3">Testimoni</p>
-            <h2 class="text-3xl sm:text-5xl font-extrabold">Kata Mereka Tentang Saya</h2>
-        </div>
-
-        <div id="testimonial-tabs" class="flex flex-wrap justify-center gap-2 mb-10">
-            @foreach(['Semua', 'Guru Pembimbing', 'Teman', 'Pengguna', 'Tempat PLK'] as $category)
-                <button type="button" data-category="{{ $category }}" class="testimonial-tab px-4 py-2 rounded-full text-sm font-semibold border border-slate-300 dark:border-slate-700 {{ $loop->first ? 'bg-cyan-500 text-slate-950 border-cyan-500' : 'hover:border-cyan-500' }}">{{ $category }}</button>
-            @endforeach
-        </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @forelse($testimonials as $testimonial)
-                <div class="testimonial-item p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800" data-category="{{ $testimonial->category }}">
-                    <div class="text-3xl text-cyan-500 mb-3">“</div>
-                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">{{ $testimonial->message }}</p>
-                    <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-full bg-cyan-100 dark:bg-cyan-400/10 flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">
-                            {{ strtoupper(substr($testimonial->name, 0, 1)) }}
-                        </div>
-                        <div>
-                            <p class="font-bold text-sm">{{ $testimonial->name }}</p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">{{ $testimonial->role }} • {{ $testimonial->category }}</p>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <p class="col-span-full text-center text-slate-500">Belum ada testimoni.</p>
-            @endforelse
-        </div>
-    </div>
-</section>
-
 <!-- ================= BLOG ================= -->
 <section id="blog" class="py-24 px-5 sm:px-6">
     <div class="max-w-7xl mx-auto reveal">
@@ -602,6 +566,102 @@
                     </button>
                 </form>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= TESTIMONI (SECTION PALING AKHIR) ================= -->
+<section id="testimonials" class="py-24 px-5 sm:px-6 bg-slate-100/70 dark:bg-slate-900/50">
+    <div class="max-w-7xl mx-auto reveal">
+        <div class="text-center mb-12">
+            <p class="text-cyan-600 dark:text-cyan-400 font-bold uppercase tracking-[0.2em] text-sm mb-3">Testimoni</p>
+            <h2 class="text-3xl sm:text-5xl font-extrabold">Kata Mereka Tentang Saya</h2>
+            <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-2xl mx-auto">
+                Cerita singkat dari guru, teman, pengguna, dan rekan PLK. Mau ikut berbagi? Isi form di bawah —
+                testimoni kamu akan tampil setelah disetujui admin.
+            </p>
+        </div>
+
+        <div id="testimonial-tabs" class="flex flex-wrap justify-center gap-2 mb-10">
+            @foreach(['Semua', 'Guru Pembimbing', 'Teman', 'Pengguna', 'Tempat PLK', 'Lainnya'] as $category)
+                <button type="button" data-category="{{ $category }}" class="testimonial-tab px-4 py-2 rounded-full text-sm font-semibold border border-slate-300 dark:border-slate-700 {{ $loop->first ? 'bg-cyan-500 text-slate-950 border-cyan-500' : 'hover:border-cyan-500' }}">{{ $category }}</button>
+            @endforeach
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($testimonials as $testimonial)
+                <div class="testimonial-item p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800" data-category="{{ $testimonial->category }}">
+                    <div class="text-3xl text-cyan-500 mb-3">“</div>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">{{ $testimonial->message }}</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-full bg-cyan-100 dark:bg-cyan-400/10 flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">
+                            {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                        </div>
+                        <div>
+                            <p class="font-bold text-sm">{{ $testimonial->name }}</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">{{ $testimonial->role }} • {{ $testimonial->category }}</p>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <p class="col-span-full text-center text-slate-500">Belum ada testimoni yang ditampilkan.</p>
+            @endforelse
+        </div>
+
+        <!-- Form kirim testimoni -->
+        <div class="mt-14 max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
+            <h3 class="text-2xl font-bold mb-2">Tinggalkan Testimoni</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Tulis kesan kamu tentang saya atau portofolio ini. Testimoni baru tampil setelah admin menyetujuinya.</p>
+
+            @if(session('testimonial_success'))
+                <div class="mb-5 p-4 rounded-xl bg-emerald-100 dark:bg-emerald-400/10 border border-emerald-300 dark:border-emerald-400/30 text-emerald-800 dark:text-emerald-300 text-sm">
+                    {{ session('testimonial_success') }}
+                </div>
+            @endif
+
+            @if($errors->testimonial->any())
+                <div class="mb-5 p-4 rounded-xl bg-red-100 dark:bg-red-400/10 border border-red-300 dark:border-red-400/30 text-red-800 dark:text-red-300 text-sm">
+                    <ul class="list-disc pl-5 space-y-1">
+                        @foreach($errors->testimonial->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('testimonials.store') }}" method="POST" class="space-y-4">
+                @csrf
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="testimonial_name" class="block text-sm font-semibold mb-2">Nama</label>
+                        <input id="testimonial_name" name="testimonial_name" type="text" value="{{ old('testimonial_name') }}" placeholder="Nama Anda"
+                            class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-cyan-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label for="testimonial_role" class="block text-sm font-semibold mb-2">Peran / Jabatan (opsional)</label>
+                        <input id="testimonial_role" name="testimonial_role" type="text" value="{{ old('testimonial_role') }}" placeholder="Contoh: Guru BK"
+                            class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-cyan-500 outline-none text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label for="testimonial_category" class="block text-sm font-semibold mb-2">Kategori</label>
+                    <select id="testimonial_category" name="testimonial_category"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-cyan-500 outline-none text-sm">
+                        <option value="">Pilih kategori</option>
+                        @foreach(['Guru Pembimbing', 'Teman', 'Pengguna', 'Tempat PLK', 'Lainnya'] as $category)
+                            <option value="{{ $category }}" {{ old('testimonial_category') === $category ? 'selected' : '' }}>{{ $category }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label for="testimonial_message" class="block text-sm font-semibold mb-2">Isi Testimoni</label>
+                    <textarea id="testimonial_message" name="testimonial_message" rows="5" placeholder="Ceritakan kesan kamu..."
+                        class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-cyan-500 outline-none text-sm">{{ old('testimonial_message') }}</textarea>
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition">
+                    Kirim Testimoni
+                </button>
+            </form>
         </div>
     </div>
 </section>
