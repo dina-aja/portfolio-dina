@@ -83,6 +83,7 @@ Salin seluruh hasilnya (diawali `base64:`) ke variabel `APP_KEY`.
 - `${{MySQL.MYSQLHOST}}` adalah referensi otomatis ke service MySQL di project yang sama. Pastikan nama service tepat `MySQL`; jika berbeda, sesuaikan.
 - `SESSION_DRIVER=database` membuat login admin tetap bertahan setelah redeploy (tabel `sessions` sudah disiapkan lewat migrasi).
 - `LOG_CHANNEL=stderr` membuat error tampil di tab **Logs** Railway.
+- `APP_URL` **wajib** memakai `https://` (bukan `http://`). Link aset yang ber-`http://` akan diblokir browser sebagai *mixed content* sehingga halaman terlihat tanpa CSS.
 
 ---
 
@@ -184,7 +185,7 @@ Railway → service MySQL → tab **Backups** → aktifkan backup otomatis. Disa
 | Gejala | Penyebab & solusi |
 | --- | --- |
 | Halaman 500 | Cek Logs. Pastikan `APP_KEY` terisi dan variabel DB benar. |
-| Tampilan tanpa CSS / hanya teks | Buka `https://domain-anda/css/app.css` — harus menampilkan teks CSS. Kalau 404: jalankan `npm run build` di komputer, lalu `git add -A && git commit -m "Fix CSS" && git push`. Tunggu deploy Railway sukses, lalu `Ctrl+F5`. |
+| Tampilan tanpa CSS / hanya teks | Buka `https://domain-anda/css/app.css` — harus menampilkan teks CSS. Kalau 404: jalankan `npm run build`, lalu commit + push. Kalau CSS 200 tapi tetap polos, cek *View Source*: link CSS harus `https://…`, bukan `http://…` (mixed content). Sudah diperbaiki di `bootstrap/app.php` + `AppServiceProvider` lewat `trustProxies` dan `forceScheme`; pastikan deploy memakai commit `8c288a1` atau lebih baru, lalu `Ctrl+F5`. |
 | Gambar 404 | Volume belum terpasang di `/app/storage/app/public`, atau jalankan ulang deploy agar `storage:link` dibuat. |
 | Login gagal / logout sendiri | Pastikan `SESSION_DRIVER=database` dan migrasi `sessions` berhasil. |
 | Data berubah sendiri setelah redeploy | `RailwaySeeder` hanya jalan saat tabel `settings` kosong. Cek apakah data memang terhapus. |
