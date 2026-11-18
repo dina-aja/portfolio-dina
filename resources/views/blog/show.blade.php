@@ -24,7 +24,7 @@
     <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight mb-6">{{ $post->title }}</h1>
 
     @if($post->image)
-        <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" class="w-full h-72 object-cover rounded-2xl mb-8">
+        <img src="{{ stored_image($post->image) }}" alt="{{ $post->title }}" class="w-full h-72 object-cover rounded-2xl mb-8">
     @endif
 
     @if($post->excerpt)

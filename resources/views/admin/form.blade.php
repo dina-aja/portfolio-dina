@@ -60,7 +60,7 @@
                         </select>
                     @elseif($type === 'image')
                         @if($item && $item->{$name})
-                            <img src="{{ asset('storage/'.$item->{$name}) }}" alt="Preview" class="w-full h-40 object-cover rounded-xl mb-3 border border-slate-700">
+                            <img src="{{ stored_image($item->{$name}) }}" alt="Preview" class="w-full h-40 object-cover rounded-xl mb-3 border border-slate-700">
                         @endif
                         <input type="file" name="{{ $name }}" accept="image/*"
                             class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm file:mr-4 file:px-4 file:py-2 file:rounded-lg file:border-0 file:bg-cyan-400 file:text-slate-950 file:font-bold">

@@ -261,7 +261,7 @@
                 <article class="project-card group flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:-translate-y-2 hover:border-cyan-500 hover:shadow-2xl transition duration-300"
                     data-category="{{ $project->category }}" data-search="{{ strtolower($project->title . ' ' . $project->technologies . ' ' . $project->description) }}">
                     <div class="relative overflow-hidden h-52 shrink-0 bg-slate-200 dark:bg-slate-800">
-                        <img src="{{ $project->image ? asset('storage/'.$project->image) : $avatar }}" alt="{{ $project->title }}"
+                        <img src="{{ stored_image($project->image, $avatar) }}" alt="{{ $project->title }}"
                             class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                         <span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500 text-slate-950">
                             {{ $project->category ?: 'Proyek' }}
@@ -310,7 +310,7 @@
 <div id="project-details" class="hidden">
     @foreach($projects as $project)
         <div id="project-detail-{{ $project->id }}">
-            <img src="{{ $project->image ? asset('storage/'.$project->image) : $avatar }}" alt="{{ $project->title }}"
+            <img src="{{ stored_image($project->image, $avatar) }}" alt="{{ $project->title }}"
                 class="w-full h-64 sm:h-80 object-cover rounded-2xl mb-6">
 
             <div class="flex flex-wrap gap-2 mb-4">
@@ -399,8 +399,8 @@
             @forelse($certificates as $certificate)
                 <div class="group rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:-translate-y-2 hover:border-cyan-500 transition">
                     @if($certificate->image)
-                        <button type="button" onclick="openLightbox('{{ asset('storage/'.$certificate->image) }}')" class="w-full h-44 overflow-hidden bg-slate-100 dark:bg-slate-800 block">
-                            <img src="{{ asset('storage/'.$certificate->image) }}" alt="{{ $certificate->title }}" class="w-full h-full object-cover group-hover:scale-105 transition">
+                        <button type="button" onclick="openLightbox('{{ stored_image($certificate->image) }}')" class="w-full h-44 overflow-hidden bg-slate-100 dark:bg-slate-800 block">
+                            <img src="{{ stored_image($certificate->image) }}" alt="{{ $certificate->title }}" class="w-full h-full object-cover group-hover:scale-105 transition">
                         </button>
                     @else
                         <div class="w-full h-44 flex items-center justify-center bg-cyan-50 dark:bg-cyan-400/5 text-5xl">🏆</div>
@@ -530,7 +530,7 @@
                 <a href="{{ route('blog.show', $post) }}" class="group rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:-translate-y-2 hover:border-cyan-500 transition">
                     <div class="h-44 overflow-hidden bg-slate-200 dark:bg-slate-800">
                         @if($post->image)
-                            <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition">
+                            <img src="{{ stored_image($post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-5xl bg-cyan-50 dark:bg-cyan-400/5">📝</div>
                         @endif

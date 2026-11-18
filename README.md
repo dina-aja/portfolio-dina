@@ -90,6 +90,13 @@ Seluruh fungsi utama diberi komentar pemetaan unit kompetensi. Detail lengkap ad
 | `resources/views/admin/` | Tampilan dashboard admin |
 | `database/seeders/DatabaseSeeder.php` | Data contoh |
 
+## Deploy ke Railway
+
+Panduan lengkap ada di [`RAILWAY.md`](RAILWAY.md). Ringkasnya: Hubungkan repo ke Railway,
+tambah MySQL, isi environment variable, generate domain, dan pasang Volume di
+`/app/storage/app/public` agar gambar upload tidak hilang saat redeploy.
+Perubahan kode/tampilan cukup di-`push`, sedangkan konten diubah lewat dashboard.
+
 ## Pengujian
 
 ```bash

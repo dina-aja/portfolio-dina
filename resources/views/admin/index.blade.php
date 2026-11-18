@@ -40,7 +40,7 @@
                                         </span>
                                     @elseif($column === 'image')
                                         @if($item->{$column})
-                                            <img src="{{ asset('storage/'.$item->{$column}) }}" class="w-14 h-12 object-cover rounded-lg" alt="">
+                                            <img src="{{ stored_image($item->{$column}) }}" class="w-14 h-12 object-cover rounded-lg" alt="">
                                         @else
                                             <span class="text-slate-600">-</span>
                                         @endif
