@@ -78,7 +78,6 @@
             <a href="#testimonials" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Testimoni</a>
             <a href="#blog" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Blog</a>
             <a href="#contact" class="mobile-link py-2 hover:text-cyan-600 dark:hover:text-cyan-400">Kontak</a>
-            <a href="/cv" class="mobile-link py-2 text-cyan-600 dark:text-cyan-400">Lihat CV</a>
         </div>
     </div>
 </nav>
@@ -446,25 +445,6 @@
             @empty
                 <p class="text-slate-500">Belum ada pengalaman yang ditambahkan.</p>
             @endforelse
-        </div>
-    </div>
-</section>
-
-<!-- ================= CV DIGITAL ================= -->
-<section id="cv" class="py-24 px-5 sm:px-6">
-    <div class="max-w-5xl mx-auto reveal">
-        <div class="rounded-3xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
-            <div>
-                <p class="font-bold uppercase tracking-[0.2em] text-sm text-cyan-100 mb-3">CV Digital</p>
-                <h2 class="text-3xl sm:text-4xl font-extrabold mb-3">Resume saya dalam satu halaman</h2>
-                <p class="text-cyan-50 leading-relaxed max-w-xl">
-                    Lihat ringkasan profil, keahlian, pengalaman, sertifikat, dan proyek saya. Cetak atau simpan sebagai PDF langsung dari browser.
-                </p>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-3 shrink-0">
-                <a href="/cv" target="_blank" class="px-6 py-3.5 rounded-xl bg-white text-blue-700 font-bold hover:scale-105 transition text-center">Lihat CV</a>
-                <a href="#contact" class="px-6 py-3.5 rounded-xl border border-white/70 font-bold hover:bg-white hover:text-blue-700 transition text-center">Hubungi Saya</a>
-            </div>
         </div>
     </div>
 </section>
