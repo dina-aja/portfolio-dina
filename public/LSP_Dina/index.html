@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio pribadi Dina - Junior Programming">
+    <title>Dina | Professional Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ================= NAVIGASI ================= -->
+    <header class="site-header">
+        <nav class="nav container">
+            <a href="#identity" class="brand">Dina<span>.</span></a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#identity">Identity</a>
+                <a href="#portfolio">Portfolio</a>
+                <button type="button" class="btn btn-outline" id="btn-admin">Admin</button>
+                <button type="button" class="btn btn-icon" id="btn-theme" aria-label="Ganti tema">◐</button>
+            </div>
+            <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Buka menu">☰</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ================= IDENTITY SECTION (PUBLIC) ================= -->
+        <!-- Unit Kompetensi J.620100.009.01: Mengikuti spesifikasi program (profil lengkap) -->
+        <section id="identity" class="identity section">
+            <div class="container identity-grid">
+                <div class="identity-photo">
+                    <img src="foto-dina.jpg" alt="Foto profil Dina" onerror="handleImageError(this)">
+                </div>
+                <div class="identity-text">
+                    <p class="eyebrow">Selamat datang di portfolio saya</p>
+                    <h1>Halo, saya <span class="accent">Dina</span></h1>
+                    <h2>Junior Web Developer & UI Enthusiast</h2>
+                    <p class="bio">
+                        Saya adalah siswi Pengembangan Perangkat Lunak dan Gim yang antusias membangun
+                        website responsif, rapi, dan mudah digunakan. Saya terus belajar melalui proyek
+                        nyata dan senang menyelesaikan masalah lewat kode.
+                    </p>
+                    <div class="identity-meta">
+                        <span>📍 Banjarmasin, Indonesia</span>
+                        <span>🎓 PPLG - SMK Negeri 1 Banjarmasin</span>
+                    </div>
+                    <div class="cta-group">
+                        <a href="#portfolio" class="btn btn-primary">Lihat Portfolio</a>
+                        <a href="mailto:dinadinaa639@gmail.com" class="btn btn-outline">Hubungi Saya</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PORTFOLIO GALLERY (PUBLIC) ================= -->
+        <!-- Unit Kompetensi J.620100.017.02: Looping & Filtering tanpa reload halaman -->
+        <section id="portfolio" class="portfolio section">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Galeri Proyek</p>
+                    <h2>Karya Saya</h2>
+                    <p class="section-subtitle">Klik filter untuk menampilkan kategori tertentu tanpa memuat ulang halaman.</p>
+                </div>
+
+                <div class="filters" id="filters" role="group" aria-label="Filter kategori proyek">
+                    <button type="button" class="filter-btn active" data-filter="Semua">Semua</button>
+                    <button type="button" class="filter-btn" data-filter="Web">Web</button>
+                    <button type="button" class="filter-btn" data-filter="Mobile">Mobile</button>
+                    <button type="button" class="filter-btn" data-filter="IoT">IoT</button>
+                </div>
+
+                <div class="project-grid" id="project-grid"></div>
+                <p class="empty-state hidden" id="empty-state">Belum ada proyek pada kategori ini.</p>
+            </div>
+        </section>
+
+        <!-- ================= ADMIN DASHBOARD (PRIVATE) ================= -->
+        <!-- Unit Kompetensi J.620100.010.01: Event Listener & Form Handling -->
+        <section id="admin" class="admin section hidden">
+            <div class="container admin-layout">
+                <div class="admin-intro">
+                    <p class="eyebrow">Area Privat</p>
+                    <h2>Admin Dashboard</h2>
+                    <p class="section-subtitle">
+                        Tambah proyek baru melalui formulir. Data tersimpan permanen di browser
+                        menggunakan <code>localStorage</code>, sehingga tidak hilang saat halaman di-refresh.
+                    </p>
+                    <div class="admin-actions">
+                        <button type="button" class="btn btn-outline" id="btn-close-admin">← Kembali ke Portofolio</button>
+                        <button type="button" class="btn btn-danger-ghost" id="btn-reset">Reset Data Awal</button>
+                    </div>
+                </div>
+
+                <form id="project-form" class="admin-form" novalidate>
+                    <h3>Tambah Proyek Baru</h3>
+
+                    <div class="form-group">
+                        <label for="input-name">Nama Proyek</label>
+                        <input type="text" id="input-name" name="name" placeholder="Contoh: Website Sekolah">
+                        <small class="error-text" id="error-name"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-category">Kategori</label>
+                        <select id="input-category" name="category">
+                            <option value="Web">Web</option>
+                            <option value="Mobile">Mobile</option>
+                            <option value="IoT">IoT</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-tech">Kategori Teknologi</label>
+                        <input type="text" id="input-tech" name="tech" placeholder="Contoh: HTML, CSS, JavaScript">
+                        <small class="error-text" id="error-tech"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-image">URL Thumbnail (.jpg)</label>
+                        <input type="url" id="input-image" name="image" placeholder="https://picsum.photos/seed/proyek/600/400">
+                        <small class="error-text" id="error-image"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-desc">Deskripsi Singkat</label>
+                        <textarea id="input-desc" name="description" rows="4" placeholder="Ceritakan singkat tentang proyek ini..."></textarea>
+                        <small class="error-text" id="error-description"></small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Simpan Proyek</button>
+                    <p class="form-note" id="form-status" role="status"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© <span id="year"></span> Dina. Dibangun dengan HTML, CSS, dan JavaScript.</p>
+            <p class="footer-note">Junior Programming - UKK Mapil</p>
+        </div>
+    </footer>
+
+    <!-- Modal konfirmasi hapus -->
+    <div class="modal hidden" id="confirm-modal">
+        <div class="modal-box">
+            <h3>Hapus proyek ini?</h3>
+            <p id="confirm-text"></p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" id="btn-cancel-delete">Batal</button>
+                <button type="button" class="btn btn-danger" id="btn-confirm-delete">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

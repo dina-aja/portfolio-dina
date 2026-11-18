@@ -63,10 +63,25 @@ Buka `http://127.0.0.1:8000`.
 
 Konfigurasi field admin ada di `config/portfolio.php`.
 
+## Deliverable UKK — Junior Programming
+
+Selain aplikasi Laravel, tersedia SPA vanilla sesuai soal **"The Professional Portfolio"** di folder `public/LSP_Dina/`:
+
+```
+https://portofolio-dina.test/LSP_Dina/index.html
+https://portofolio-dina.test/LSP_Dina/tests.html
+```
+
+Berisi `index.html`, `style.css`, `main.js`, `foto-dina.jpg`, dan halaman pengujian unit.
+Menyediakan Identity Section, Portfolio Gallery, dan Admin Dashboard dengan tambah/hapus proyek,
+filter Web/Mobile/IoT tanpa reload, serta penyimpanan permanen memakai `localStorage`.
+Seluruh fungsi utama diberi komentar pemetaan unit kompetensi. Detail lengkap ada di `public/LSP_Dina/README.md`.
+
 ## Struktur Penting
 
 | Path | Fungsi |
 | --- | --- |
+| `public/LSP_Dina/` | Deliverable SPA UKK (HTML, CSS, JS murni + unit test) |
 | `config/portfolio.php` | Definisi setting profil & field CRUD admin |
 | `app/Http/Controllers/CrudController.php` | Mesin CRUD generik untuk semua konten |
 | `app/Models/Setting.php` | Key-value setting website |
@@ -80,6 +95,8 @@ Konfigurasi field admin ada di `config/portfolio.php`.
 ```bash
 php artisan test
 ```
+
+Pengujian unit SPA UKK: buka `https://portofolio-dina.test/LSP_Dina/tests.html` (13 test case).
 
 ## Teknologi
 
