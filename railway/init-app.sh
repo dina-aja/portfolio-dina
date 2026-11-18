@@ -1,26 +1,26 @@
-#!/bin/bash
+#!/bin/sh
 # ============================================================================
 # Railway - Pre-Deploy Script
-# Dijalankan otomatis oleh railway.json sebelum aplikasi mulai melayani request.
+# Dijalankan otomatis oleh railway.json sebelum aplikasi menerima request.
+#
+# Catatan: Railpack sudah menangani composer install, npm build, migrasi,
+# storage link, dan optimasi cache. Script ini hanya memastikan data awal
+# terisi sekali pada deploy pertama dan cache disegarkan dengan variabel
+# environment produksi yang benar-benar aktif saat runtime.
 # ============================================================================
 set -e
 
-echo ">>> Menjalankan migrasi database..."
+echo ">>> Menjalankan migrasi database (aman dijalankan berulang)..."
 php artisan migrate --force
 
-echo ">>> Mengisi data awal (hanya jika database masih kosong)..."
+echo ">>> Mengisi data awal hanya jika database masih kosong..."
 php artisan db:seed --class=RailwaySeeder --force
 
-echo ">>> Membuat symlink storage..."
+echo ">>> Membuat symlink storage (jika belum ada)..."
 php artisan storage:link || true
 
-echo ">>> Membersihkan cache lama..."
+echo ">>> Menyegarkan cache dengan environment produksi..."
 php artisan optimize:clear
-
-echo ">>> Meng-cache konfigurasi, route, event, dan view..."
-php artisan config:cache
-php artisan event:cache
-php artisan route:cache
-php artisan view:cache
+php artisan optimize
 
 echo ">>> Pre-deploy selesai."

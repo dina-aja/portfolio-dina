@@ -24,7 +24,7 @@ git push origin main
 
 File yang sudah disiapkan untuk Railway:
 
-- `railway.json` — perintah build & pre-deploy
+- `railway.json` — pilihan builder Railpack & perintah pre-deploy
 - `railway/init-app.sh` — migrasi, seed awal, storage link, cache
 - `database/seeders/RailwaySeeder.php` — seed hanya saat database kosong
 - `app/helpers.php` — fallback gambar yang belum tersedia
@@ -87,15 +87,19 @@ Salin seluruh hasilnya (diawali `base64:`) ke variabel `APP_KEY`.
 
 ## 4. Perintah build & deploy
 
-Sudah diatur di `railway.json`, tidak perlu diketik manual:
+`railway.json` hanya menentukan builder, pre-deploy, healthcheck, dan restart policy. **Jangan mengisi Custom Build Command / Start Command** — Railpack akan menimpa langkah bawaan Laravel (composer install + npm build) kalau diisi manual.
 
-| Tahap | Perintah |
+| Tahap | Yang terjadi otomatis |
 | --- | --- |
-| Build | `npm install && npm run build` (composer ditangani otomatis oleh Railpack) |
-| Pre-deploy | `railway/init-app.sh` → migrate + seed awal + storage link + cache |
-| Start | **Biarkan default.** Railway mendeteksi Laravel dan menjalankan php-fpm + Caddy. |
+| Deteksi | Railpack mengenali Laravel dari `artisan` + `composer.json`, memilih PHP 8.2+ |
+| Install | `composer install` dan `npm install` |
+| Build | `npm run build` (aset Vite/Tailwind), lalu optimasi config/event/route/view |
+| Pre-deploy | `railway/init-app.sh` → migrate + seed awal + storage link + segarkan cache |
+| Start | **Default:** FrankenPHP + Caddy dengan document root `/app/public`. Migrasi & storage link juga dijalankan ulang otomatis saat start (aman, karena idempoten). |
 
 > ⚠️ Jangan mengisi Custom Start Command dengan `php artisan serve`. Itu server development dan tidak cocok untuk produksi.
+
+Kalau ingin menonaktifkan migrasi otomatis Railpack (karena sudah di pre-deploy), tambahkan variabel `RAILPACK_SKIP_MIGRATIONS=true`. Tidak wajib.
 
 Setelah variabel terisi, klik **Deploy**. Tunggu hingga status berhasil, lalu buka domain.
 
