@@ -98,7 +98,10 @@ class PortfolioSmokeTest extends TestCase
             'is_approved' => false,
         ]);
 
-        $this->get('/')->assertDontSee('Uji Testimoni');
+        $this->get('/')
+            ->assertDontSee('Uji Testimoni')
+            ->assertSee('id="testimonial-feedback"', false)
+            ->assertSee("scrollIntoView({ behavior: 'smooth', block: 'center' })", false);
     }
 
     public function test_validasi_form_testimoni_menggunakan_error_bag_tersendiri(): void
@@ -113,6 +116,10 @@ class PortfolioSmokeTest extends TestCase
         $response->assertRedirect('/');
         $response->assertSessionHasErrors(['testimonial_name', 'testimonial_category', 'testimonial_rating', 'testimonial_message'], null, 'testimonial');
         $this->assertDatabaseCount('testimonials', 0);
+
+        $this->get('/')
+            ->assertSee('Nama wajib diisi.')
+            ->assertSee("scrollIntoView({ behavior: 'smooth', block: 'center' })", false);
     }
 
     public function test_halaman_admin_testimoni_hanya_memiliki_aksi_persetujuan(): void

@@ -626,6 +626,8 @@
             <h3 class="text-2xl font-bold mb-2">Tinggalkan Testimoni</h3>
             <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Tulis kesan kamu tentang saya atau portofolio ini. Testimoni baru tampil setelah admin menyetujuinya.</p>
 
+            <div id="testimonial-feedback" class="scroll-mt-24"></div>
+
             @if(session('testimonial_success'))
                 <div class="mb-5 p-4 rounded-xl bg-emerald-100 dark:bg-emerald-400/10 border border-emerald-300 dark:border-emerald-400/30 text-emerald-800 dark:text-emerald-300 text-sm">
                     {{ session('testimonial_success') }}
@@ -642,7 +644,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('testimonials.store') }}" method="POST" class="space-y-4">
+            <form id="testimonial-form" action="{{ route('testimonials.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div class="grid sm:grid-cols-2 gap-4">
                     <div>
@@ -774,6 +776,12 @@
                             input.addEventListener('change', updateText);
                         }
                     });
+
+                    // Setelah kirim, arahkan pandangan ke pesan sukses/error supaya tidak terlewat.
+                    @if(session('testimonial_success') || $errors->testimonial->any())
+                        const feedback = document.getElementById('testimonial-feedback');
+                        if (feedback) feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    @endif
                 })();
             </script>
         </div>
