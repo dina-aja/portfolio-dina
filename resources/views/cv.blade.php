@@ -38,7 +38,6 @@
                 <span>☎ {{ $settings['phone'] }}</span>
                 <span>📍 {{ $settings['location'] }}</span>
                 <span>🐙 {{ $settings['github'] }}</span>
-                @if($settings['linkedin'])<span>💼 {{ $settings['linkedin'] }}</span>@endif
             </div>
         </div>
     </div>

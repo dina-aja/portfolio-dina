@@ -26,10 +26,8 @@ return [
         'career_goal' => ['label' => 'Cita-cita / Tujuan Karir', 'type' => 'textarea', 'group' => 'Tentang Saya', 'default' => 'Menjadi Full-Stack Developer yang mampu membangun produk digital bermanfaat dan terus berkontribusi di industri teknologi.'],
         'email' => ['label' => 'Email', 'type' => 'email', 'group' => 'Kontak', 'default' => 'dinadinaa639@gmail.com'],
         'phone' => ['label' => 'Nomor Telepon', 'type' => 'text', 'group' => 'Kontak', 'default' => '+62 857-5171-4154'],
-        'whatsapp' => ['label' => 'Nomor WhatsApp (angka saja)', 'type' => 'text', 'group' => 'Kontak', 'default' => '6285751714154'],
         'instagram' => ['label' => 'Link Instagram', 'type' => 'url', 'group' => 'Kontak', 'default' => 'https://instagram.com/ddina597'],
         'github' => ['label' => 'Link GitHub', 'type' => 'url', 'group' => 'Kontak', 'default' => 'https://github.com/dina-aja'],
-        'linkedin' => ['label' => 'Link LinkedIn', 'type' => 'url', 'group' => 'Kontak', 'default' => ''],
         'cv_url' => ['label' => 'Link CV / Resume (opsional)', 'type' => 'url', 'group' => 'Kontak', 'default' => ''],
     ],
 

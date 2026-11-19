@@ -24,6 +24,25 @@ class PortfolioSmokeTest extends TestCase
         $response->assertSee('Catatan Ngoding');
     }
 
+    public function test_kontak_whatsapp_dan_linkedin_tidak_tampil_di_publik_dan_admin(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('WhatsApp')
+            ->assertDontSee('LinkedIn')
+            ->assertDontSee('wa.me');
+
+        $this->get('/cv')
+            ->assertOk()
+            ->assertDontSee('LinkedIn');
+
+        $this->actingAs(User::factory()->create())
+            ->get('/admin/settings')
+            ->assertOk()
+            ->assertDontSee('Nomor WhatsApp')
+            ->assertDontSee('Link LinkedIn');
+    }
+
     public function test_form_kesan_pesan_dapat_dikirim(): void
     {
         $this->post('/kontak/pesan', [

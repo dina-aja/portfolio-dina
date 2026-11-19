@@ -22,7 +22,7 @@
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 overflow-x-hidden selection:bg-cyan-400 selection:text-slate-950">
 
 @php
-    $wa = preg_replace('/\D/', '', $settings['whatsapp'] ?? '');
+    $phone = preg_replace('/[^0-9+]/', '', $settings['phone'] ?? '');
     $avatar = ! empty($settings['avatar']) ? asset($settings['avatar']) : asset('images/dina.jpg');
     $hardSkills = $skills->where('category', 'Hard Skill');
     $softSkills = $skills->where('category', 'Soft Skill');
@@ -501,10 +501,9 @@
             <div class="grid sm:grid-cols-2 gap-4">
                 @foreach([
                     ['✉️', 'Email', $settings['email'], 'mailto:'.$settings['email']],
-                    ['📱', 'WhatsApp', $settings['phone'], 'https://wa.me/'.$wa],
+                    ['☎️', 'Telepon', $settings['phone'], 'tel:'.$phone],
                     ['🐙', 'GitHub', 'Lihat repository', $settings['github']],
                     ['📸', 'Instagram', $settings['instagram'] ?: '-', $settings['instagram']],
-                    ['💼', 'LinkedIn', 'Profil LinkedIn', $settings['linkedin']],
                     ['📍', 'Lokasi', $settings['location'], '#home'],
                 ] as [$icon, $label, $value, $link])
                     <a href="{{ $link ?: '#' }}" target="_blank" rel="noopener"

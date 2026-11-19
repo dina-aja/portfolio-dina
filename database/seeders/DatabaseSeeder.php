@@ -122,7 +122,7 @@ class DatabaseSeeder extends Seeder
                 'goal' => 'Meningkatkan daya tarik visual dan kemudahan calon pembeli dalam melihat informasi produk.',
                 'technologies' => 'HTML, CSS, JavaScript, Figma',
                 'role' => 'UI/UX Designer & Front-End Developer',
-                'features' => "Desain responsif\nGaleri produk\nTombol kontak WhatsApp\nAnimasi scroll sederhana",
+                'features' => "Desain responsif\nGaleri produk\nTombol kontak\nAnimasi scroll sederhana",
                 'story' => 'Saya membuat moodboard terlebih dahulu, lalu prototipe di Figma sebelum masuk ke tahap coding agar arah desain lebih jelas.',
                 'detail' => 'Proyek ini menekankan pada hierarchy visual dan call-to-action yang jelas.',
                 'image' => 'projects/QGXZIuEzRRAzrCK3LXv08SRmWjdogPaHpjm5tGmb.jpg',
