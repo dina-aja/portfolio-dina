@@ -104,13 +104,43 @@ class PortfolioSmokeTest extends TestCase
             ->assertSee("scrollIntoView({ behavior: 'smooth', block: 'center' })", false);
     }
 
+    public function test_deskripsi_testimoni_tidak_ada_batas_minimal_atau_maksimal(): void
+    {
+        $pendek = $this->post('/testimoni', [
+            'testimonial_name' => 'Testimoni Singkat',
+            'testimonial_category' => 'Lainnya',
+            'testimonial_rating' => 5,
+            'testimonial_message' => 'Oke',
+        ]);
+
+        $pendek->assertRedirect();
+        $this->assertDatabaseHas('testimonials', [
+            'name' => 'Testimoni Singkat',
+            'message' => 'Oke',
+        ]);
+
+        $panjang = str_repeat('Deskripsi testimoni tanpa batas.', 300);
+        $this->post('/testimoni', [
+            'testimonial_name' => 'Testimoni Panjang',
+            'testimonial_category' => 'Lainnya',
+            'testimonial_rating' => 5,
+            'testimonial_message' => $panjang,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('testimonials', [
+            'name' => 'Testimoni Panjang',
+            'message' => $panjang,
+        ]);
+        $this->assertDatabaseCount('testimonials', 2);
+    }
+
     public function test_validasi_form_testimoni_menggunakan_error_bag_tersendiri(): void
     {
         $response = $this->from('/')->post('/testimoni', [
             'testimonial_name' => '',
             'testimonial_category' => '',
             'testimonial_rating' => '',
-            'testimonial_message' => 'pendek',
+            'testimonial_message' => '',
         ]);
 
         $response->assertRedirect('/');

@@ -22,7 +22,8 @@ class TestimonialController extends Controller
             'testimonial_role' => 'nullable|max:150',
             'testimonial_category' => 'required|in:Guru Pembimbing,Teman,Pengguna,Tempat PLK,Lainnya',
             'testimonial_rating' => 'required|integer|min:1|max:5',
-            'testimonial_message' => 'required|min:10|max:1000',
+            // Isi testimoni bebas panjangnya: tidak ada batas minimal maupun maksimal.
+            'testimonial_message' => 'required',
         ], [
             'testimonial_name.required' => 'Nama wajib diisi.',
             'testimonial_category.required' => 'Kategori wajib dipilih.',
@@ -30,8 +31,6 @@ class TestimonialController extends Controller
             'testimonial_rating.min' => 'Penilaian minimal 1 bintang.',
             'testimonial_rating.max' => 'Penilaian maksimal 5 bintang.',
             'testimonial_message.required' => 'Isi testimoni wajib ditulis.',
-            'testimonial_message.min' => 'Testimoni minimal 10 karakter.',
-            'testimonial_message.max' => 'Testimoni maksimal 1000 karakter.',
         ]);
 
         if ($validator->fails()) {
